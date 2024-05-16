@@ -180,6 +180,7 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
          }
      }
  }
+ static ImGuiTextFilter filter;
  void ImGui::Renderer::Render() {
      auto viewport = ImGui::GetMainViewport();
      ImGui::SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Appearing, ImVec2{0.5f, 0.5f});
@@ -188,12 +189,20 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
      window_flags |= ImGuiWindowFlags_NoCollapse;
      ImGui::Begin("SKSE Configuration Menu", nullptr, window_flags);
 
+        ImGui::BeginChild("TreeView2", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, 20), ImGuiChildFlags_None,
+                       window_flags);
+        filter.Draw("##myFilter", -FLT_MIN);
+        ImGui::EndChild();
+        ImGui::SameLine();
+        ImGui::BeginChild("ModMenuHeader", ImVec2(0, 20), ImGuiChildFlags_None,
+                          window_flags);
+        ImGui::EndChild();
 
         ImGui::BeginChild("TreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, -FLT_MIN), ImGuiChildFlags_None,
                             window_flags);
         node_id = 0;
         for (const auto & item : root->Children) {
-            if ((ImGui::CollapsingHeader(std::format("{}##{}", item.first, node_id).c_str()))) {
+            if (filter.PassFilter(item.first.c_str())&&(ImGui::CollapsingHeader(std::format("{}##{}", item.first, node_id).c_str()))) {
                 for (auto node : item.second->Children) {
                     RenderNode(node);
                 }
