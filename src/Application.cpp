@@ -3,6 +3,7 @@
 
 MenuTree* root = new MenuTree();
 std::vector<Window*> windows;
+std::vector<std::function<void(ImGuiContext*)>> contextSetFunctions;
 
 void AddToTree(MenuTree* node, std::vector<std::string>& path, std::function<void()>& render) {
     if (!path.empty()) {

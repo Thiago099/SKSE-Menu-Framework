@@ -14,7 +14,12 @@ void AddWindow(const char* name, ImGuiWindowFlags flags, std::function<void()> c
     window->Render = copyOfRenderer;
     windows.push_back(window);
 }
-ImGuiContext * GetContext() {
-    return ImGui::GetCurrentContext();
+EXPORT_FUNCTION void SetContextFetch(std::function<void(ImGuiContext*)> contextSetFunction) {
+    if (ImGui::Renderer::initialized.load()) {
+        contextSetFunction(ImGui::GetCurrentContext());
+    } else {
+        std::function<void(ImGuiContext*)> copyOfContextSetFunction = contextSetFunction;
+        contextSetFunctions.push_back(copyOfContextSetFunction);
+    }
 }
 
