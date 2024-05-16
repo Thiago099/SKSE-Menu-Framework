@@ -143,7 +143,7 @@ static ImGuiTreeNodeFlags base_flags =
 
 size_t item_current_idx = 0;
 size_t node_id = 0;
-std::function<void()> render_function;
+MenuTree* display_node;
 
 void DummyRenderer(std::pair<const std::string, MenuTree*>& node) { 
     ++node_id; 
@@ -165,8 +165,8 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
      bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)node_id, node_flags, node.first.c_str(), node_id);
      if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
          if (node.second->Render) {
-            item_current_idx = node_id;
-            render_function = node.second->Render;
+             item_current_idx = node_id;
+             display_node = node.second;
          }
      }
      if (node_open && node.second->Children.size() != 0) {
@@ -196,6 +196,15 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
         ImGui::SameLine();
         ImGui::BeginChild("ModMenuHeader", ImVec2(0, 20), ImGuiChildFlags_None,
                           window_flags);
+        if (display_node) {
+            auto windowWidth = ImGui::GetWindowSize().x ;
+            auto textWidth = ImGui::CalcTextSize(display_node->Title.c_str()).x;
+            float offsetX = (windowWidth - textWidth) * 0.5f;
+            ImGui::SetCursorPosX(offsetX);
+            ImGui::Text(display_node->Title.c_str());
+        } else {
+            //TODO: Default title
+        }
         ImGui::EndChild();
 
         ImGui::BeginChild("TreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, -FLT_MIN), ImGuiChildFlags_None,
@@ -215,9 +224,9 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
          ImGui::EndChild();
          ImGui::SameLine();
          ImGui::BeginChild("ModMenu", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
-         if (render_function) {
-            render_function();
-         }
+         if (display_node) {
+             display_node->Render();
+         } 
          ImGui::EndChild();
 
  

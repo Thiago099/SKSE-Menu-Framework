@@ -7,6 +7,7 @@ class MenuTree {
 public:
     std::map<std::string, MenuTree*> Children;
     std::function<void()> Render;
+    std::string Title;
 };
 
 class Window {
