@@ -208,5 +208,15 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
 
  
     ImGui::End();
+
+    for (const auto window : windows) {
+        ImGui::SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Appearing, ImVec2{0.5f, 0.5f});
+        ImGui::SetNextWindowSize(ImVec2{viewport->Size.x * 0.8f, viewport->Size.y * 0.8f}, ImGuiCond_Appearing);
+        ImGui::Begin(window->Name.c_str(), nullptr, window->Flags);
+        ImGui::BeginChild("ModMenu2", ImVec2(0, -FLT_MIN), ImGuiChildFlags_None, window_flags);
+        window->Render();
+        ImGui::EndChild();
+        ImGui::End();
+    }
  }
 
