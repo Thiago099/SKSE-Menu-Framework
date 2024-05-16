@@ -1,9 +1,19 @@
 #pragma once
 #include <imgui.h>
 
-extern std::unordered_map<std::string, std::function<void()>> menus;
 
-extern "C"
-    [[maybe_unused]] __declspec(dllexport) void AddRenderer(const char* menu, std::function<void()> const& rendererFunction);
 
-extern "C" [[maybe_unused]] __declspec(dllexport) ImGuiContext* GetContext();
+class MenuTree {
+public:
+    std::vector<MenuTree*> Children;
+    std::string Name;
+    std::function<void()> Render;
+};
+
+#define EXPORT_FUNCTION extern "C" [[maybe_unused]] __declspec(dllexport)
+
+EXPORT_FUNCTION void AddSection(const char* menu, std::function<void()> const& rendererFunction);
+
+EXPORT_FUNCTION ImGuiContext* GetContext();
+
+extern MenuTree* root;

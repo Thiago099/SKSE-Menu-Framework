@@ -17,7 +17,6 @@ set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 
 
 
-
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.rc.in
         ${CMAKE_CURRENT_BINARY_DIR}/version.rc

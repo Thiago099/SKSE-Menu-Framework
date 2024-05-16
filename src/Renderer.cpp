@@ -89,10 +89,8 @@ void ImGui::DXGIPresentHook::thunk(std::uint32_t a_timer) {
         io.DisplaySize.x = static_cast<float>(screenSize.width);
         io.DisplaySize.y = static_cast<float>(screenSize.height);
     }
-    { 
-        ImGui::NewFrame();
-        Renderer::Render();
-    }
+    ImGui::NewFrame();
+    Renderer::Render();
     ImGui::EndFrame();
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -105,6 +103,7 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
         if (e->eventType.get() != RE::INPUT_EVENT_TYPE::kButton) continue;
         const RE::ButtonEvent* a_event = e->AsButtonEvent();
         if (a_event->IsPressed() || a_event->IsHeld()) continue;
+
 
         if (a_event->GetIDCode() == RE::BSKeyboardDevice::Key::kF1) {
             ImGui::Renderer::isOpen = !ImGui::Renderer::isOpen;
@@ -133,25 +132,64 @@ void ImGui::ProcessInputQueueHook::thunk(RE::BSTEventSource<RE::InputEvent*>* a_
     return builder;
  }
 
-bool modify_palyer_speed = false;
-bool modify_horse_speed = false;
-bool modify_npc_speed = false;
-int FastTravelSpeedThreshold = 100;
-int GodModeSpeedMutiplier = 200;
+static ImGuiTreeNodeFlags base_flags =
+     ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+ static int selection_mask = (1 << 2);
 
-float bar = 0.5f;
-int foo = 100;
+size_t item_current_idx = 0;
+size_t i = 0;
 
-void ImGui::Renderer::Render() {
+ void RenderTree(MenuTree* node) {
+     ImGuiTreeNodeFlags node_flags = base_flags;
+     //const bool is_selected = item_current_idx == i;
+     //if (is_selected) node_flags |= ImGuiTreeNodeFlags_Selected;
+
+     if (node->Children.size() == 0) {
+         node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; 
+     }
+     bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, node->Name.c_str(), i);
+     if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+         item_current_idx = i;
+     }
+     if (node_open && node->Children.size() != 0) {
+         for (auto item : node->Children) {
+             RenderTree(item);
+         }
+         ImGui::TreePop();
+     }
+ }
+ void ImGui::Renderer::Render() {
      auto viewport = ImGui::GetMainViewport();
      ImGui::SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Appearing, ImVec2{0.5f, 0.5f});
-     ImGui::SetNextWindowSize(ImVec2{viewport->Size.x * 0.8f, viewport->Size.y * 0.6f}, ImGuiCond_Appearing);
+     ImGui::SetNextWindowSize(ImVec2{viewport->Size.x * 0.8f, viewport->Size.y * 0.8f}, ImGuiCond_Appearing);
      ImGuiWindowFlags window_flags = 0;
      window_flags |= ImGuiWindowFlags_NoCollapse;
      ImGui::Begin("Dynamic Speed", nullptr, window_flags);
 
-     menus["test"]();
 
+        ImGui::BeginChild("TreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, -FLT_MIN), ImGuiChildFlags_None,
+                            window_flags);
+
+        i = 0;
+        for (auto item : root->Children) {
+            if ((ImGui::CollapsingHeader(std::format("{}##{}", item->Name, i).c_str()))) {
+                for (auto node : item->Children) {
+                    RenderTree(node);
+                }
+            }
+        }
+
+  
+             ++i;
+         ImGui::EndChild();
+         ImGui::SameLine();
+         ImGui::BeginChild("ModMenu", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
+         //if (!selected.empty()) {
+         //    menus[selected]();
+         //}
+         ImGui::EndChild();
+
+ 
     ImGui::End();
  }
 

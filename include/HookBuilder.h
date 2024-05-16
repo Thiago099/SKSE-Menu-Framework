@@ -29,7 +29,7 @@ private:
             _ae_id = ae_id;
             _se_offset = se_offset;
             _ae_offset = ae_offset;
-            _vr_id = _vr_id;
+            _vr_id = vr_id;
             _vr_offset = vr_offset;
         }
         size_t GetTrampolineSize() { return TS; }
