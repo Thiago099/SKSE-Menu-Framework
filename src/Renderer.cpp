@@ -137,25 +137,42 @@ static ImGuiTreeNodeFlags base_flags =
  static int selection_mask = (1 << 2);
 
 size_t item_current_idx = 0;
-size_t i = 0;
+size_t node_id = 0;
+std::function<void()> render_function;
 
- void RenderTree(MenuTree* node) {
+void DummyRenderer(std::pair<const std::string, MenuTree*>& node) { 
+    ++node_id; 
+    for (auto& item : node.second->Children) {
+        DummyRenderer(item);
+    }
+}
+
+
+ void RenderNode(std::pair<const std::string, MenuTree*>& node) {
+    ++node_id;
      ImGuiTreeNodeFlags node_flags = base_flags;
      //const bool is_selected = item_current_idx == i;
-     //if (is_selected) node_flags |= ImGuiTreeNodeFlags_Selected;
+     if (item_current_idx == node_id) node_flags |= ImGuiTreeNodeFlags_Selected;
 
-     if (node->Children.size() == 0) {
+     if (node.second->Children.size() == 0) {
          node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; 
      }
-     bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, node->Name.c_str(), i);
+     bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)node_id, node_flags, node.first.c_str(), node_id);
      if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-         item_current_idx = i;
+         if (node.second->Render) {
+            item_current_idx = node_id;
+            render_function = node.second->Render;
+         }
      }
-     if (node_open && node->Children.size() != 0) {
-         for (auto item : node->Children) {
-             RenderTree(item);
+     if (node_open && node.second->Children.size() != 0) {
+         for (auto & item : node.second->Children) {
+             RenderNode(item);
          }
          ImGui::TreePop();
+     } else {
+         for (auto& item : node.second->Children) {
+             DummyRenderer(item);
+         }
      }
  }
  void ImGui::Renderer::Render() {
@@ -164,29 +181,29 @@ size_t i = 0;
      ImGui::SetNextWindowSize(ImVec2{viewport->Size.x * 0.8f, viewport->Size.y * 0.8f}, ImGuiCond_Appearing);
      ImGuiWindowFlags window_flags = 0;
      window_flags |= ImGuiWindowFlags_NoCollapse;
-     ImGui::Begin("Dynamic Speed", nullptr, window_flags);
+     ImGui::Begin("SKSE Configuration Menu", nullptr, window_flags);
 
 
-        ImGui::BeginChild("TreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, -FLT_MIN), ImGuiChildFlags_None,
+        ImGui::BeginChild("TreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, -FLT_MIN), ImGuiChildFlags_None,
                             window_flags);
-
-        i = 0;
-        for (auto item : root->Children) {
-            if ((ImGui::CollapsingHeader(std::format("{}##{}", item->Name, i).c_str()))) {
-                for (auto node : item->Children) {
-                    RenderTree(node);
+        node_id = 0;
+        for (const auto & item : root->Children) {
+            if ((ImGui::CollapsingHeader(std::format("{}##{}", item.first, node_id).c_str()))) {
+                for (auto node : item.second->Children) {
+                    RenderNode(node);
+                }
+            } else {
+                for (auto node : item.second->Children) {
+                    DummyRenderer(node);
                 }
             }
         }
-
-  
-             ++i;
          ImGui::EndChild();
          ImGui::SameLine();
          ImGui::BeginChild("ModMenu", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
-         //if (!selected.empty()) {
-         //    menus[selected]();
-         //}
+         if (render_function) {
+            render_function();
+         }
          ImGui::EndChild();
 
  

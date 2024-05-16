@@ -13,6 +13,7 @@ private:
     public:
         virtual void Install(SKSE::Trampoline& tranpoline) = 0;
         virtual size_t GetTrampolineSize() = 0;
+        virtual ~GenericHookItem() {}
     };
     template <class T, std::size_t N, std::size_t TS, WriteKind Kind>
     class HookItem : public GenericHookItem {

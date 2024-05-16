@@ -4,4 +4,5 @@ set(headers ${headers}
 	include/Renderer.h
 	include/SkyrimImgui.h
 	include/Input.h
+	include/Application.h
 )

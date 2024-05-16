@@ -3,4 +3,6 @@ set(sources ${sources}
 	include/Renderer.cpp
 	include/SkyrimImgui.cpp
 	include/Input.cpp
+	include/Application.cpp
+	include/Model.cpp
 )
