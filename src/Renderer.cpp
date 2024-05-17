@@ -106,7 +106,7 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
      for (RE::InputEvent* e = *evns; e; e = e->next) {
         if (e->eventType.get() != RE::INPUT_EVENT_TYPE::kButton) continue;
         const RE::ButtonEvent* a_event = e->AsButtonEvent();
-        if (a_event->IsPressed() || a_event->IsHeld()) continue;
+        if (a_event->IsPressed() || a_event->IsHeld() || a_event->GetDevice() != RE::INPUT_DEVICE::kKeyboard) continue;
         if (a_event->GetIDCode() == Config::ToggleKey) {
             ImGui::Renderer::isOpen = !ImGui::Renderer::isOpen;
         }
@@ -224,11 +224,15 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
         }
          ImGui::EndChild();
          ImGui::SameLine();
-         ImGui::BeginChild(display_node?display_node->UUID.c_str():"00000000-0000-0000-0000-000000000000", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
          if (display_node) {
-             display_node->Render();
+            ImGui::BeginChild(display_node->UUID.c_str(), ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
+            display_node->Render();
+            ImGui::EndChild();
          } 
-         ImGui::EndChild();
+         else {
+             ImGui::BeginChild("DummyNode", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
+             ImGui::EndChild();
+         }
 
  
     ImGui::End();
