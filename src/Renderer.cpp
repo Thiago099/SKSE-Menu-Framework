@@ -192,10 +192,10 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
 
         ImGui::BeginChild("TreeView2", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, 20), ImGuiChildFlags_None,
                        window_flags);
-        filter.Draw("##myFilter", -FLT_MIN);
+        filter.Draw("##SKSEModHubMenuFilter", -FLT_MIN);
         ImGui::EndChild();
         ImGui::SameLine();
-        ImGui::BeginChild("ModMenuHeader", ImVec2(0, 20), ImGuiChildFlags_None,
+        ImGui::BeginChild("SKSEModHubModMenuHeader", ImVec2(0, 20), ImGuiChildFlags_None,
                           window_flags);
         if (display_node) {
             auto windowWidth = ImGui::GetWindowSize().x ;
@@ -208,7 +208,7 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
         }
         ImGui::EndChild();
 
-        ImGui::BeginChild("TreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, -FLT_MIN), ImGuiChildFlags_Border,
+        ImGui::BeginChild("SKSEModHubTreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, -FLT_MIN), ImGuiChildFlags_Border,
                             window_flags);
         node_id = 0;
         for (const auto & item : root->Children) {
@@ -222,17 +222,13 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
                 }
             }
         }
-         ImGui::EndChild();
-         ImGui::SameLine();
+        ImGui::EndChild();
+        ImGui::SameLine();
+        ImGui::BeginChild("SKSEModHubMenuNode", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
          if (display_node) {
-            ImGui::BeginChild(display_node->UUID.c_str(), ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
             display_node->Render();
-            ImGui::EndChild();
          } 
-         else {
-             ImGui::BeginChild("DummyNode", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
-             ImGui::EndChild();
-         }
+        ImGui::EndChild();
 
  
     ImGui::End();

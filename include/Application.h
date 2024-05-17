@@ -8,9 +8,6 @@ extern std::vector<Window*> windows;
 void AddToTree(MenuTree* node, std::vector<std::string>& path, std::function<void()>& render, std::string title);
 std::vector<std::string> SplitString(const std::string& input, char delimiter);
 int GetKeyBinding(std::string input);
-
-std::string CreateStringGuid();
-
 class Ini {
 private:
     CSimpleIniA _ini;

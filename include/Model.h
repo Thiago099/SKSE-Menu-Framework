@@ -8,7 +8,6 @@ public:
     std::map<std::string, MenuTree*> Children;
     std::function<void()> Render;
     std::string Title;
-    std::string UUID;
 };
 
 class Window {
