@@ -1,8 +1,8 @@
 set(sources ${sources}
-	src/plugin.cpp
-	include/Renderer.cpp
-	include/SkyrimImgui.cpp
-	include/Input.cpp
-	include/Application.cpp
-	include/Model.cpp
+	src/Application.cpp
+	src/Config.cpp
+	src/Input.cpp
+	src/Plugin.cpp
+	src/Renderer.cpp
+	src/SKSEModHub.cpp
 )

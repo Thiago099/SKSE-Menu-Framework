@@ -1,5 +1,5 @@
-#include "Logger.h"
-#include "Renderer.h"
+#include "Plugin.h"
+
 void OnMessage(SKSE::MessagingInterface::Message* message) {
     if (message->type == SKSE::MessagingInterface::kDataLoaded) {
         // Start
@@ -13,6 +13,7 @@ SKSEPluginLoad(const SKSE::LoadInterface *skse) {
     SetupLog();
     logger::info("Plugin loaded");
     SKSE::Init(skse);
+    Config::Init();
     SKSE::GetMessagingInterface()->RegisterListener(OnMessage);
 
     auto builder = ImGui::Renderer::GetBuilder();

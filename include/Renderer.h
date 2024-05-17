@@ -1,6 +1,9 @@
 
 #pragma once
 #include "HookBuilder.h"
+#include "SKSEModHub.h"
+#include "Application.h"
+#include "Config.h"
 #include "Input.h"
 #include "Model.h"
 #include <imgui_impl_dx11.h>

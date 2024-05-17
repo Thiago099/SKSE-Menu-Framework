@@ -1,10 +1,10 @@
-#include "SkyrimImgui.h"
+#include "SKSEModHub.h"
 
 
-void AddSection(const char* path, const char* title, std::function<void()> const& rendererFunction) { 
+void AddSection(const char* path, std::function<void()> const& rendererFunction) { 
     std::function<void()> copyOfRenderer = rendererFunction;
     auto pathSplit = SplitString(path, '/');
-    AddToTree(root, pathSplit, copyOfRenderer, title);
+    AddToTree(root, pathSplit, copyOfRenderer, pathSplit.back());
 }
 void AddWindow(const char* name, ImGuiWindowFlags flags, std::function<void()> const& rendererFunction) {
     std::function<void()> copyOfRenderer = rendererFunction;

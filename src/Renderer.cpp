@@ -1,6 +1,5 @@
 #include "Renderer.h"
-#include "SkyrimImgui.h"
-#include "Application.h"
+
 
 
 LRESULT ImGui::WndProcHook::thunk(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -108,10 +107,11 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
         if (e->eventType.get() != RE::INPUT_EVENT_TYPE::kButton) continue;
         const RE::ButtonEvent* a_event = e->AsButtonEvent();
         if (a_event->IsPressed() || a_event->IsHeld()) continue;
-
-
-        if (a_event->GetIDCode() == RE::BSKeyboardDevice::Key::kF1) {
+        if (a_event->GetIDCode() == Config::ToggleKey) {
             ImGui::Renderer::isOpen = !ImGui::Renderer::isOpen;
+        }
+        if ( a_event->GetIDCode() == REX::W32::DIK_ESCAPE) {
+            ImGui::Renderer::isOpen = false;
         }
      }
 }
@@ -167,6 +167,8 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
          if (node.second->Render) {
              item_current_idx = node_id;
              display_node = node.second;
+         } else {
+             ImGui::TreeNodeSetOpen(node_id,true);
          }
      }
      if (node_open && node.second->Children.size() != 0) {
@@ -181,13 +183,14 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
      }
  }
  static ImGuiTextFilter filter;
+ int frame = 0;
  void ImGui::Renderer::Render() {
      auto viewport = ImGui::GetMainViewport();
      ImGui::SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Appearing, ImVec2{0.5f, 0.5f});
      ImGui::SetNextWindowSize(ImVec2{viewport->Size.x * 0.8f, viewport->Size.y * 0.8f}, ImGuiCond_Appearing);
      ImGuiWindowFlags window_flags = 0;
      window_flags |= ImGuiWindowFlags_NoCollapse;
-     ImGui::Begin("SKSE Configuration Menu", nullptr, window_flags);
+     ImGui::Begin("SKSE Mod Hub", nullptr, window_flags);
 
         ImGui::BeginChild("TreeView2", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, 20), ImGuiChildFlags_None,
                        window_flags);
@@ -207,7 +210,7 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
         }
         ImGui::EndChild();
 
-        ImGui::BeginChild("TreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, -FLT_MIN), ImGuiChildFlags_None,
+        ImGui::BeginChild("TreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, -FLT_MIN), ImGuiChildFlags_Border,
                             window_flags);
         node_id = 0;
         for (const auto & item : root->Children) {
