@@ -1,9 +1,29 @@
 #include "Application.h"
-#include "Model.h"
 
 MenuTree* root = new MenuTree();
 std::vector<Window*> windows;
 std::vector<std::function<void(ImGuiContext*)>> contextSetFunctions;
+
+std::string CreateStringGuid() {
+    GUID guid;
+    HRESULT hCreateGuid = CoCreateGuid(&guid);
+    if (SUCCEEDED(hCreateGuid)) {
+        wchar_t szGuid[39];  // GUID is 16 bytes, each represented by 2 characters, plus hyphens and null terminator
+        if (StringFromGUID2(guid, szGuid, sizeof(szGuid) / sizeof(wchar_t))) {
+            // Convert wide character to narrow character (char array)
+            char szGuidA[39];
+            wcstombs(szGuidA, szGuid, sizeof(szGuidA));
+            return std::string(szGuidA);
+        } else {
+            // If conversion fails, return an empty string
+            return "00000000-0000-0000-0000-000000000000";
+        }
+    } else {
+        // If GUID creation fails, return an empty string
+        return "00000000-0000-0000-0000-000000000000";
+    }
+}
+
 
 void AddToTree(MenuTree* node, std::vector<std::string>& path, std::function<void()>& render, std::string title) {
     if (!path.empty()) {
@@ -21,6 +41,7 @@ void AddToTree(MenuTree* node, std::vector<std::string>& path, std::function<voi
     } else {
         node->Render = render;
         node->Title = title;
+        node->UUID = CreateStringGuid();
     }
 }
 
@@ -154,3 +175,4 @@ int GetKeyBinding(std::string input) {
         return 0x0;
     }
 }
+

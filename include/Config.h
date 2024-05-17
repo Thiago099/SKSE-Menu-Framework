@@ -4,5 +4,5 @@
 class Config {
     public:
     static void Init();
-    static int ToggleKey;
+    static unsigned int ToggleKey;
 };

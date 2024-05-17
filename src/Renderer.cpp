@@ -167,8 +167,6 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
          if (node.second->Render) {
              item_current_idx = node_id;
              display_node = node.second;
-         } else {
-             ImGui::TreeNodeSetOpen(node_id,true);
          }
      }
      if (node_open && node.second->Children.size() != 0) {
@@ -226,7 +224,7 @@ void DummyRenderer(std::pair<const std::string, MenuTree*>& node) {
         }
          ImGui::EndChild();
          ImGui::SameLine();
-         ImGui::BeginChild("ModMenu", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
+         ImGui::BeginChild(display_node?display_node->UUID.c_str():"00000000-0000-0000-0000-000000000000", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
          if (display_node) {
              display_node->Render();
          } 
