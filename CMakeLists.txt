@@ -86,17 +86,17 @@ include(cmake/sourcelist.cmake)
 install(TARGETS ${PROJECT_NAME}
         DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-set_property(TARGET ${PRODUCT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
-else()
-set_property(TARGET ${PRODUCT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
-endif()
-foreach(target ${PRODUCT_NAME} ${PROJECT_NAME})
-    if(TARGET ${target})
-        set_target_properties(${target} PROPERTIES
-            MSVC_RUNTIME_LIBRARY ${CMAKE_MSVC_RUNTIME_LIBRARY})
-    endif()
-endforeach()
+#if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+#set_property(TARGET ${PRODUCT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
+#else()
+#set_property(TARGET ${PRODUCT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
+#endif()
+#foreach(target ${PRODUCT_NAME} ${PROJECT_NAME})
+#    if(TARGET ${target})
+#        set_target_properties(${target} PROPERTIES
+#            MSVC_RUNTIME_LIBRARY ${CMAKE_MSVC_RUNTIME_LIBRARY})
+#    endif()
+#endforeach()
 
 find_package(imgui CONFIG REQUIRED)
 target_link_libraries(${PRODUCT_NAME} PRIVATE imgui::imgui)
