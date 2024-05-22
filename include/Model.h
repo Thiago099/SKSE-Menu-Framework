@@ -2,11 +2,12 @@
 
 #include <imgui.h>
 
+typedef void(__stdcall* RenderFunction)();
 
 class MenuTree {
 public:
     std::map<std::string, MenuTree*> Children;
-    std::function<void()> Render;
+    RenderFunction Render;
     std::string Title;
 };
 
@@ -14,5 +15,5 @@ class Window {
 public:
     std::string Name;
     ImGuiWindowFlags Flags;
-    std::function<void()> Render;
+    RenderFunction Render;
 };

@@ -1,17 +1,15 @@
 #include "SKSEModHub.h"
 
 
-void AddSection(const char* path, std::function<void()> const& rendererFunction) { 
-    std::function<void()> copyOfRenderer = rendererFunction;
+void AddSection(const char* path, RenderFunction rendererFunction) { 
     auto pathSplit = SplitString(path, '/');
-    AddToTree(root, pathSplit, copyOfRenderer, pathSplit.back());
+    AddToTree(root, pathSplit, rendererFunction, pathSplit.back());
 }
-void AddWindow(const char* name, ImGuiWindowFlags flags, std::function<void()> const& rendererFunction) {
-    std::function<void()> copyOfRenderer = rendererFunction;
+void AddWindow(const char* name, ImGuiWindowFlags flags, RenderFunction rendererFunction) {
     auto window = new Window();
     window->Flags = flags;
     window->Name = name;
-    window->Render = copyOfRenderer;
+    window->Render = rendererFunction;
     windows.push_back(window);
 }
 EXPORT_FUNCTION void SetContextFetch(std::function<void(ImGuiContext*)> contextSetFunction) {

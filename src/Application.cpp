@@ -6,7 +6,7 @@ std::vector<std::function<void(ImGuiContext*)>> contextSetFunctions;
 
 
 
-void AddToTree(MenuTree* node, std::vector<std::string>& path, std::function<void()>& render, std::string title) {
+void AddToTree(MenuTree* node, std::vector<std::string>& path, RenderFunction render, std::string title) {
     if (!path.empty()) {
         auto currentName = path.front();
         path.erase(path.begin());

@@ -11,6 +11,8 @@ LRESULT ImGui::WndProcHook::thunk(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 }
 
 void ImGui::D3DInitHook::thunk() {
+    logger::debug("[D3DInitHook] START");
+
     originalFunction();
 
     const auto renderer = RE::BSGraphics::Renderer::GetSingleton();
@@ -69,7 +71,7 @@ void ImGui::D3DInitHook::thunk() {
     if (!WndProcHook::func) {
         SKSE::log::error("SetWindowLongPtrA failed!");
     }
-
+    logger::debug("[D3DInitHook] FINISH");
 }
 
 void ImGui::DXGIPresentHook::thunk(std::uint32_t a_timer) {

@@ -5,7 +5,7 @@
 extern std::vector<std::function<void(ImGuiContext*)>> contextSetFunctions;
 extern MenuTree* root;
 extern std::vector<Window*> windows;
-void AddToTree(MenuTree* node, std::vector<std::string>& path, std::function<void()>& render, std::string title);
+void AddToTree(MenuTree* node, std::vector<std::string>& path, RenderFunction render, std::string title);
 std::vector<std::string> SplitString(const std::string& input, char delimiter);
 int GetKeyBinding(std::string input);
 class Ini {
