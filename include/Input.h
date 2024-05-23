@@ -1,5 +1,5 @@
 #pragma once
-#include <imgui.h>
+#include <imgui/imgui.h>
 namespace ImGui {
     void TranslateInputEvent(RE::InputEvent* const* a_event);
 }

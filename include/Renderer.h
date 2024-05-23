@@ -6,11 +6,11 @@
 #include "Config.h"
 #include "Input.h"
 #include "Model.h"
-#include <imgui_impl_dx11.h>
-#include <imgui_impl_win32.h>
+#include <imgui/imgui_impl_dx11.h>
+#include <imgui/imgui_impl_win32.h>
 #include <dxgi.h>
-#include <imgui.h>
-#include <imgui_internal.h>
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 
 namespace ImGui {

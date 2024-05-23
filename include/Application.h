@@ -2,7 +2,6 @@
 #include "Model.h"
 #include "SimpleIni.h"
 #include "combaseapi.h"
-extern std::vector<std::function<void(ImGuiContext*)>> contextSetFunctions;
 extern MenuTree* root;
 extern std::vector<Window*> windows;
 void AddToTree(MenuTree* node, std::vector<std::string>& path, RenderFunction render, std::string title);

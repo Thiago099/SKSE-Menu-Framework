@@ -73,6 +73,8 @@ add_commonlibsse_plugin(
 )
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
 target_precompile_headers(${PROJECT_NAME} PRIVATE include/PCH.h) # <--- PCH.h is required!
+
+
 target_include_directories(
 	${PROJECT_NAME}
 	PRIVATE
@@ -98,8 +100,19 @@ install(TARGETS ${PROJECT_NAME}
 #    endif()
 #endforeach()
 
-find_package(imgui CONFIG REQUIRED)
-target_link_libraries(${PRODUCT_NAME} PRIVATE imgui::imgui)
+
+set(ImGui_BASE_DIR "E:/www/skyrim/imgui")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(ImGui_INSTALL_DIR "${ImGui_BASE_DIR}/debug")
+else()
+    set(ImGui_INSTALL_DIR "${ImGui_BASE_DIR}/release")
+endif()
+
+set(ImGui_DIR "${ImGui_INSTALL_DIR}/lib/cmake")
+list(APPEND CMAKE_PREFIX_PATH ${ImGui_DIR})
+find_package(ImGui CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE ImGui::imgui)
 
 
 function(copyOutputs TARGET_FOLDER)

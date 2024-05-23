@@ -12,21 +12,12 @@
     "directxmath",
     "directxtk",
     "boost-stl-interfaces",
-    "clib-util",
-    {
-      "name": "imgui",
-      "features": [ "dx11-binding", "win32-binding" ]
-    }
+    "clib-util"
   ],
   "overrides": [
     {
       "name": "fmt",
       "version": "9.1.0"
-    },
-    {
-      "name": "imgui",
-      "version": "1.90.6"
-
     }
   ],
   "builtin-baseline": "78b61582c9e093fda56a01ebb654be15a0033897"

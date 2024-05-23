@@ -1,5 +1,5 @@
 #pragma once
-#include <imgui.h>
+#include <imgui/imgui.h>
 #include "Application.h"
 #include "Renderer.h"
 
@@ -8,4 +8,3 @@
 
 EXPORT_FUNCTION void AddSection(const char* path, RenderFunction rendererFunction);
 EXPORT_FUNCTION void AddWindow(const char* key, ImGuiWindowFlags flags, std::function<void()> const& rendererFunction);
-EXPORT_FUNCTION void SetContextFetch(std::function<void(ImGuiContext*)> contextSetFunction);

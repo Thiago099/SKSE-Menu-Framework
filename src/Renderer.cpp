@@ -32,7 +32,6 @@ void ImGui::D3DInitHook::thunk() {
         SKSE::log::error("IDXGISwapChain::GetDesc failed.");
         return;
     }
-
     const auto device = (ID3D11Device*)renderer->data.forwarder;
     const auto context = (ID3D11DeviceContext*)renderer->data.context;
 
@@ -59,10 +58,6 @@ void ImGui::D3DInitHook::thunk() {
     }
 
     Renderer::initialized.store(true);
-
-    for (const auto& item : contextSetFunctions) {
-        item(ImGui::GetCurrentContext());
-    }
 
     SKSE::log::info("ImGui initialized.");
 
