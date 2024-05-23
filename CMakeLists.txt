@@ -100,6 +100,7 @@ install(TARGETS ${PROJECT_NAME}
 #    endif()
 #endforeach()
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE IS_HOST_PLUGIN)
 
 set(ImGui_BASE_DIR "E:/www/skyrim/imgui")
 
@@ -142,6 +143,14 @@ function(copyOutputs TARGET_FOLDER)
             VERBATIM
         )
     endif()
+
+    add_custom_command(
+        TARGET "${PROJECT_NAME}"
+        POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/include/SKSEModHub.h" "${DLL_FOLDER}"
+        VERBATIM
+    )
+
 endfunction()
 
 
