@@ -1,7 +1,6 @@
 #include "Application.h"
 
 MenuTree* root = new MenuTree();
-std::vector<Window*> windows;
 std::vector<std::function<void(ImGuiContext*)>> contextSetFunctions;
 
 

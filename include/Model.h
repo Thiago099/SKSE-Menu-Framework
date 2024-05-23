@@ -10,10 +10,3 @@ public:
     RenderFunction Render;
     std::string Title;
 };
-
-class Window {
-public:
-    std::string Name;
-    ImGuiWindowFlags Flags;
-    RenderFunction Render;
-};
