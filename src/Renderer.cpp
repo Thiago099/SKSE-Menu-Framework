@@ -103,7 +103,7 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
      for (RE::InputEvent* e = *evns; e; e = e->next) {
         if (e->eventType.get() != RE::INPUT_EVENT_TYPE::kButton) continue;
         const RE::ButtonEvent* a_event = e->AsButtonEvent();
-        if (a_event->IsPressed() || a_event->IsHeld() || a_event->GetDevice() != RE::INPUT_DEVICE::kKeyboard) continue;
+        if (!a_event->IsDown() || a_event->GetDevice() != RE::INPUT_DEVICE::kKeyboard) continue;
         if (a_event->GetIDCode() == Config::ToggleKey) {
             ImGui::Renderer::isOpen = !ImGui::Renderer::isOpen;
         }
@@ -118,6 +118,11 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
                 main->freezeTime = false;
             }
         }
+        if (!ImGui::Renderer::isOpen.load()) {
+            auto&io = ImGui::GetIO();
+            memset(io.KeysData, 0, sizeof(io.KeysData));
+        }
+
      }
 }
 
@@ -127,11 +132,9 @@ void ImGui::ProcessInputQueueHook::thunk(RE::BSTEventSource<RE::InputEvent*>* a_
     if (ImGui::Renderer::isOpen) {
         constexpr RE::InputEvent* const dummy[] = {nullptr};
         originalFunction(a_dispatcher, dummy);
+        ImGui::TranslateInputEvent(a_event);
     } else {
         originalFunction(a_dispatcher, a_event);
-    }
-    if (Renderer::isOpen.load()) {
-        ImGui::TranslateInputEvent(a_event);
     }
 }
 
