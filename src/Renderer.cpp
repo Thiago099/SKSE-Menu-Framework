@@ -130,7 +130,9 @@ void ImGui::ProcessInputQueueHook::thunk(RE::BSTEventSource<RE::InputEvent*>* a_
     } else {
         originalFunction(a_dispatcher, a_event);
     }
-    ImGui::TranslateInputEvent(a_event);
+    if (Renderer::isOpen.load()) {
+        ImGui::TranslateInputEvent(a_event);
+    }
 }
 
 
