@@ -110,6 +110,14 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
         if ( a_event->GetIDCode() == REX::W32::DIK_ESCAPE) {
             ImGui::Renderer::isOpen = false;
         }
+        if (Config::FreezeTimeOnMenu) {
+            const auto main = RE::Main::GetSingleton();
+            if (ImGui::Renderer::isOpen) {
+                main->freezeTime = true;
+            } else {
+                main->freezeTime = false;
+            }
+        }
      }
 }
 
