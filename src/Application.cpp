@@ -38,7 +38,7 @@ std::vector<std::string> SplitString(const std::string& input, char delimiter) {
 
 int GetKeyBinding(std::string input) {
 
-    std::transform(input.begin(), input.end(), input.begin(), [](char c) { return std::toupper(c); });
+    std::transform(input.begin(), input.end(), input.begin(), [](char c) { return static_cast<char>(std::toupper(c)); });
 
     const std::unordered_map<std::string, int> keymap = {
         {"NONE", 0x00},
