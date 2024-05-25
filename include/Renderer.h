@@ -1,7 +1,6 @@
 
 #pragma once
 #include "HookBuilder.h"
-#include "SKSEModHub.h"
 #include "Application.h"
 #include "Config.h"
 #include "Input.h"
@@ -13,14 +12,35 @@
 #include <imgui/imgui_internal.h>
 
 
-namespace ImGui {
-    class Renderer {
+namespace UI {
 
+    class WindowInterface;
+    inline WindowInterface* MainInterface;
+
+    typedef void(__stdcall* RenderWindowFunction)(UI::WindowInterface*);
+
+
+    class WindowInterface {
+        public:
+        std::atomic<bool> IsOpen{false};
+    };
+    class Window {
+    public:
+        Window() {
+            Interface= new WindowInterface;
+        }
+        WindowInterface* Interface;
+        RenderWindowFunction Render;
+    };
+
+    extern std::vector<UI::Window*> Windows;
+
+    class Renderer {
     public:
         static HookBuilder* GetBuilder();
         static void Render();
+        static void RenderWindows();
         static inline std::atomic<bool> initialized{false};
-        static inline std::atomic<bool> isOpen{false};
     };
 
     struct WndProcHook {
@@ -35,7 +55,6 @@ namespace ImGui {
 
     struct DXGIPresentHook {
         static void thunk(std::uint32_t a_timer);
-
         static inline REL::Relocation<decltype(thunk)> originalFunction;
     };
 
@@ -43,5 +62,14 @@ namespace ImGui {
         static void thunk(RE::BSTEventSource<RE::InputEvent*>* a_dispatcher, RE::InputEvent* const* a_event);
         static inline REL::Relocation<decltype(thunk)> originalFunction;
     };
+
+    namespace UserInput {
+        void UI::TranslateInputEvent(RE::InputEvent* const* a_event);
+    }
+    bool IsAnyWindowOpen();
+
+
 }
+
+
 
