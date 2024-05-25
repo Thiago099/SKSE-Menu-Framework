@@ -17,8 +17,7 @@ namespace UI {
     class WindowInterface;
     inline WindowInterface* MainInterface;
 
-    typedef void(__stdcall* RenderWindowFunction)(UI::WindowInterface*);
-
+    typedef void(__stdcall* RenderFunction)();
 
     class WindowInterface {
         public:
@@ -30,7 +29,7 @@ namespace UI {
             Interface= new WindowInterface;
         }
         WindowInterface* Interface;
-        RenderWindowFunction Render;
+        RenderFunction Render;
     };
 
     extern std::vector<UI::Window*> Windows;

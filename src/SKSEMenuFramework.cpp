@@ -6,7 +6,7 @@ void AddSection(const char* path, UI::RenderFunction rendererFunction) {
     AddToTree(UI::RootMenu, pathSplit, rendererFunction, pathSplit.back());
 }
 
-UI::WindowInterface* AddWindow(UI::RenderWindowFunction rendererFunction) { 
+UI::WindowInterface* AddWindow(UI::RenderFunction rendererFunction) { 
 
     auto newWindow = new UI::Window();
 

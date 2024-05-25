@@ -16,7 +16,7 @@
 
 #ifdef IS_HOST_PLUGIN
 FUNCTION_PREFIX void AddSection(const char* path, UI::RenderFunction rendererFunction);
-FUNCTION_PREFIX UI::WindowInterface* AddWindow(UI::RenderWindowFunction rendererFunction);
+FUNCTION_PREFIX UI::WindowInterface* AddWindow(UI::RenderFunction rendererFunction);
 #else
     #define MENU_WINDOW SKSEMenuFramework::Model::WindowInterface*
     namespace SKSEMenuFramework{
@@ -26,7 +26,6 @@ FUNCTION_PREFIX UI::WindowInterface* AddWindow(UI::RenderWindowFunction renderer
                 std::atomic<bool> IsOpen{false};
             };
             typedef void(__stdcall* RenderFunction)();
-            typedef void(__stdcall* RenderWindowFunction)(WindowInterface*);
         }
 
         namespace Internal {
@@ -39,7 +38,7 @@ FUNCTION_PREFIX UI::WindowInterface* AddWindow(UI::RenderWindowFunction renderer
         inline void AddSection(std::string menu, Model::RenderFunction rendererFunction) {
             Internal::AddSection((Internal::key + "/" + menu).c_str(), rendererFunction);
         }
-        FUNCTION_PREFIX Model::WindowInterface* AddWindow(Model::RenderWindowFunction rendererFunction);
+        FUNCTION_PREFIX Model::WindowInterface* AddWindow(Model::RenderFunction rendererFunction);
 
         inline void Init(std::string key) { Internal::key = key; }
     }

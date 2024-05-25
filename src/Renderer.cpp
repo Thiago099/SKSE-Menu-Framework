@@ -152,7 +152,7 @@ HookBuilder* UI::Renderer::GetBuilder() {
 void UI::Renderer::RenderWindows() {
     for (const auto window : Windows) {
         if (window->Interface->IsOpen) {
-            window->Render(window->Interface);
+            window->Render();
         }
     }
 }
