@@ -18,7 +18,8 @@
 FUNCTION_PREFIX void AddSection(const char* path, UI::RenderFunction rendererFunction);
 FUNCTION_PREFIX UI::WindowInterface* AddWindow(UI::RenderWindowFunction rendererFunction);
 #else
-    namespace SKSEModHub{
+    #define MENU_WINDOW SKSEMenuFramework::Model::WindowInterface*
+    namespace SKSEMenuFramework{
         namespace Model {
             class WindowInterface {
                 public:

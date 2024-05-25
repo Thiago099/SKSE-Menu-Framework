@@ -8,6 +8,6 @@ set(headers ${headers}
 	include/PCH.h
 	include/Plugin.h
 	include/Renderer.h
-	include/SKSEModHub.h
+	include/SKSEMenuFramework.h
 	include/UI.h
 )

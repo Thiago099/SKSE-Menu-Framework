@@ -7,6 +7,7 @@
 
 
 std::vector<std::string> SplitString(const std::string& input, char delimiter);
+
 int GetKeyBinding(std::string input);
 namespace Utils {
     class Ini {

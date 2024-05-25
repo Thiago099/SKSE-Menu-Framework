@@ -59,14 +59,14 @@ void UI::RenderMenuWindow(UI::WindowInterface*)
     ImGui::SetNextWindowSize(ImVec2{viewport->Size.x * 0.8f, viewport->Size.y * 0.8f}, ImGuiCond_Appearing);
     ImGuiWindowFlags window_flags = 0;
     window_flags |= ImGuiWindowFlags_NoCollapse;
-    ImGui::Begin("SKSE Mod Hub", nullptr, window_flags);
+    ImGui::Begin("Mod Control Panel", nullptr, window_flags);
 
     ImGui::BeginChild("TreeView2", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, 20), ImGuiChildFlags_None,
                       window_flags);
-    filter.Draw("##SKSEModHubMenuFilter", -FLT_MIN);
+    filter.Draw("##SKSEModControlPanelMenuFilter", -FLT_MIN);
     ImGui::EndChild();
     ImGui::SameLine();
-    ImGui::BeginChild("SKSEModHubModMenuHeader", ImVec2(0, 20), ImGuiChildFlags_None, window_flags);
+    ImGui::BeginChild("SKSEModControlPanelModMenuHeader", ImVec2(0, 20), ImGuiChildFlags_None, window_flags);
     if (display_node) {
         auto windowWidth = ImGui::GetWindowSize().x;
         auto textWidth = ImGui::CalcTextSize(display_node->Title.c_str()).x;
@@ -78,7 +78,7 @@ void UI::RenderMenuWindow(UI::WindowInterface*)
     }
     ImGui::EndChild();
 
-    ImGui::BeginChild("SKSEModHubTreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, -FLT_MIN),
+    ImGui::BeginChild("SKSEModControlPanelTreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, -FLT_MIN),
                       ImGuiChildFlags_Border, window_flags);
     node_id = 0;
     for (const auto& item : RootMenu->Children) {
@@ -95,7 +95,7 @@ void UI::RenderMenuWindow(UI::WindowInterface*)
     }
     ImGui::EndChild();
     ImGui::SameLine();
-    ImGui::BeginChild("SKSEModHubMenuNode", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
+    ImGui::BeginChild("SKSEModControlPanelMenuNode", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
     if (display_node) {
         display_node->Render();
     }

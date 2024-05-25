@@ -4,6 +4,6 @@ set(sources ${sources}
 	src/Input.cpp
 	src/Plugin.cpp
 	src/Renderer.cpp
-	src/SKSEModHub.cpp
+	src/SKSEMenuFramework.cpp
 	src/UI.cpp
 )

@@ -2,4 +2,4 @@
 #include "Config.h"
 #include "Logger.h"
 #include "UI.h"
-#include "SKSEModHub.h"
+#include "SKSEMenuFramework.h"

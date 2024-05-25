@@ -1,4 +1,4 @@
-#include "SKSEModHub.h"
+#include "SKSEMenuFramework.h"
 
 
 void AddSection(const char* path, UI::RenderFunction rendererFunction) { 

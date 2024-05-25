@@ -9,7 +9,7 @@ set(steam_mods_output true)
 cmake_minimum_required(VERSION 3.21)
 # Set your project name. This will be the name of your SKSE .dll file.
 set(AUTHOR_NAME "SkyrimThiago")
-set(PRODUCT_NAME "SKSEModHub")
+set(PRODUCT_NAME "SKSEMenuFramework")
 project(${PRODUCT_NAME} VERSION 0.1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -147,7 +147,7 @@ function(copyOutputs TARGET_FOLDER)
     add_custom_command(
         TARGET "${PROJECT_NAME}"
         POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/include/SKSEModHub.h" "${DLL_FOLDER}"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/include/SKSEMenuFramework.h" "${DLL_FOLDER}"
         VERBATIM
     )
 

@@ -90,9 +90,7 @@ void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
         io.DisplaySize.y = static_cast<float>(screenSize.height);
     }
     ImGui::NewFrame();
-    if (IsAnyWindowOpen()) {
-        Renderer::RenderWindows();
-    }
+    Renderer::RenderWindows();
     ImGui::EndFrame();
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
