@@ -68,7 +68,6 @@ void UI::D3DInitHook::thunk() {
     }
     logger::debug("[D3DInitHook] FINISH");
 }
-bool isAnyWindowOpen = false;
 void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
     originalFunction(a_timer);
 
@@ -76,9 +75,7 @@ void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
         return;
     }
 
-
-    isAnyWindowOpen = IsAnyWindowOpen();
-    if (!isAnyWindowOpen) {
+    if (!IsAnyWindowOpen()) {
         return;
     }
 
@@ -124,7 +121,7 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
         const RE::ButtonEvent* a_event = e->AsButtonEvent();
         if (!a_event->IsDown() || a_event->GetDevice() != RE::INPUT_DEVICE::kKeyboard) continue;
         if (a_event->GetIDCode() == Config::ToggleKey) {
-            UI::MainInterface->IsOpen = UI::MainInterface->IsOpen.load();
+            UI::MainInterface->IsOpen = !UI::MainInterface->IsOpen.load();
         }
         if (a_event->GetIDCode() == REX::W32::DIK_ESCAPE) {
             UI::MainInterface->IsOpen = false;
@@ -137,8 +134,7 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
 void UI::ProcessInputQueueHook::thunk(RE::BSTEventSource<RE::InputEvent*>* a_dispatcher,
                                       RE::InputEvent* const* a_event) {
     ProcessOpenClose(a_event);
-    isAnyWindowOpen = IsAnyWindowOpen();
-    if (isAnyWindowOpen) {
+    if (IsAnyWindowOpen()) {
         constexpr RE::InputEvent* const dummy[] = {nullptr};
         originalFunction(a_dispatcher, dummy);
         TranslateInputEvent(a_event);
