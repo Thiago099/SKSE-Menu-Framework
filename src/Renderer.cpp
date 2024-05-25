@@ -2,6 +2,29 @@
 
 std::vector<UI::Window*> UI::Windows;
 
+namespace GameLock {
+    enum State { None, Locked, Unlocked };
+    State lastState = State::None;
+    void SetState(State currentState) {
+        if (lastState == currentState) {
+            return;
+        }
+        lastState = currentState;
+        if (Config::FreezeTimeOnMenu) {
+            const auto main = RE::Main::GetSingleton();
+            if (currentState == State::Locked) {
+                main->freezeTime = true;
+            } else {
+                main->freezeTime = false;
+            }
+        }
+        if (currentState == State::Unlocked) {
+            auto& io = ImGui::GetIO();
+            memset(io.KeysData, 0, sizeof(io.KeysData));
+        }
+    }
+}
+
 LRESULT UI::WndProcHook::thunk(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     if (uMsg == WM_KILLFOCUS) {
         auto& io = ImGui::GetIO();
@@ -76,8 +99,11 @@ void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
     }
 
     if (!IsAnyWindowOpen()) {
+        GameLock::SetState(GameLock::State::Unlocked);
         return;
     }
+    GameLock::SetState(GameLock::State::Locked);
+
 
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -95,21 +121,7 @@ void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
-void SetGameLock(bool doLock) {
 
-    if (Config::FreezeTimeOnMenu) {
-        const auto main = RE::Main::GetSingleton();
-        if (doLock) {
-            main->freezeTime = true;
-        } else {
-            main->freezeTime = false;
-        }
-    }
-    if (!doLock) {
-        auto& io = ImGui::GetIO();
-        memset(io.KeysData, 0, sizeof(io.KeysData));
-    }
-}
 
 void ProcessOpenClose(RE::InputEvent* const* evns) {
     if (!*evns) return;
@@ -124,7 +136,6 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
         if (a_event->GetIDCode() == REX::W32::DIK_ESCAPE) {
             UI::MainInterface->IsOpen = false;
         }
-
     }
 }
 
