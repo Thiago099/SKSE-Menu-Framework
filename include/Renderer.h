@@ -12,6 +12,12 @@
 #include <imgui/imgui_internal.h>
 
 
+namespace GameLock {
+    enum State { None, Locked, Unlocked };
+    extern State lastState;
+    void SetState(State currentState);
+}
+
 namespace UI {
 
     class WindowInterface;

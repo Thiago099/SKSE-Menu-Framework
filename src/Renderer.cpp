@@ -2,26 +2,24 @@
 
 std::vector<UI::Window*> UI::Windows;
 
-namespace GameLock {
-    enum State { None, Locked, Unlocked };
-    State lastState = State::None;
-    void SetState(State currentState) {
-        if (lastState == currentState) {
-            return;
+GameLock::State GameLock::lastState = GameLock::State::None;
+
+void GameLock::SetState(State currentState) {
+    if (lastState == currentState) {
+        return;
+    }
+    lastState = currentState;
+    if (Config::FreezeTimeOnMenu) {
+        const auto main = RE::Main::GetSingleton();
+        if (currentState == State::Locked) {
+            main->freezeTime = true;
+        } else {
+            main->freezeTime = false;
         }
-        lastState = currentState;
-        if (Config::FreezeTimeOnMenu) {
-            const auto main = RE::Main::GetSingleton();
-            if (currentState == State::Locked) {
-                main->freezeTime = true;
-            } else {
-                main->freezeTime = false;
-            }
-        }
-        if (currentState == State::Unlocked) {
-            auto& io = ImGui::GetIO();
-            memset(io.KeysData, 0, sizeof(io.KeysData));
-        }
+    }
+    if (currentState == State::Unlocked) {
+        auto& io = ImGui::GetIO();
+        memset(io.KeysData, 0, sizeof(io.KeysData));
     }
 }
 
