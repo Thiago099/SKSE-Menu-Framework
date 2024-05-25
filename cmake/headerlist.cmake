@@ -9,4 +9,5 @@ set(headers ${headers}
 	include/Plugin.h
 	include/Renderer.h
 	include/SKSEModHub.h
+	include/UI.h
 )

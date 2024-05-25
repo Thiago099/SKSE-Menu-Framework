@@ -1,9 +1,11 @@
 #pragma once
 #include <imgui/imgui.h>
 
+
 #ifdef IS_HOST_PLUGIN
     #include "Application.h"
     #include "Renderer.h"
+    #include "UI.h"
 #endif
 
 #ifdef IS_HOST_PLUGIN
@@ -13,25 +15,31 @@
 #endif
 
 #ifdef IS_HOST_PLUGIN
-FUNCTION_PREFIX void AddSection(const char* path, RenderFunction rendererFunction);
+FUNCTION_PREFIX void AddSection(const char* path, UI::RenderFunction rendererFunction);
+FUNCTION_PREFIX UI::WindowInterface* AddWindow(UI::RenderWindowFunction rendererFunction);
 #else
-    namespace SKSEModHubModel{
-        typedef void(__stdcall* RenderFunction)();
-    }
-
-    namespace SKSEModHubInternal {
-
-        inline std::string key;
-
-        FUNCTION_PREFIX void AddSection(const char* path, SKSEModHubModel::RenderFunction rendererFunction);
-    }
-
-    namespace SKSEModHub {
-
-        inline void AddSection(std::string menu, SKSEModHubModel::RenderFunction rendererFunction) {
-            SKSEModHubInternal::AddSection((SKSEModHubInternal::key + "/" + menu).c_str(), rendererFunction);
+    namespace SKSEModHub{
+        namespace Model {
+            class WindowInterface {
+                public:
+                std::atomic<bool> IsOpen{false};
+            };
+            typedef void(__stdcall* RenderFunction)();
+            typedef void(__stdcall* RenderWindowFunction)(WindowInterface*);
         }
 
-        inline void Init(std::string key) { SKSEModHubInternal::key = key; }
+        namespace Internal {
+
+            inline std::string key;
+
+            FUNCTION_PREFIX void AddSection(const char* path, Model::RenderFunction rendererFunction);
+        }
+
+        inline void AddSection(std::string menu, Model::RenderFunction rendererFunction) {
+            Internal::AddSection((Internal::key + "/" + menu).c_str(), rendererFunction);
+        }
+        FUNCTION_PREFIX Model::WindowInterface* AddWindow(Model::RenderWindowFunction rendererFunction);
+
+        inline void Init(std::string key) { Internal::key = key; }
     }
 #endif
