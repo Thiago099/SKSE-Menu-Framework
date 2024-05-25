@@ -38,7 +38,6 @@ namespace UI {
     class Renderer {
     public:
         static HookBuilder* GetBuilder();
-        static void Render();
         static void RenderWindows();
         static inline std::atomic<bool> initialized{false};
     };
