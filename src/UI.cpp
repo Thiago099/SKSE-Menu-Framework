@@ -51,9 +51,7 @@ void RenderNode(std::pair<const std::string, UI::MenuTree*>& node) {
     }
 }
 
-
-void UI::RenderMenuWindow()
-{
+void __stdcall UI::RenderMenuWindow() {
     auto viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(viewport->GetCenter(), ImGuiCond_Appearing, ImVec2{0.5f, 0.5f});
     ImGui::SetNextWindowSize(ImVec2{viewport->Size.x * 0.8f, viewport->Size.y * 0.8f}, ImGuiCond_Appearing);

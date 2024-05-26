@@ -9,6 +9,6 @@ namespace UI {
         std::string Title;
     };
     extern UI::MenuTree* RootMenu;
-    void RenderMenuWindow();
+    void __stdcall RenderMenuWindow();
     void AddToTree(UI::MenuTree* node, std::vector<std::string>& path, UI::RenderFunction render, std::string title);
 }
