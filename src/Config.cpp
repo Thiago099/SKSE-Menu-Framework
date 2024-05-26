@@ -4,7 +4,7 @@ unsigned int Config::ToggleKey = 0x3B;
 bool Config::FreezeTimeOnMenu = true;
 
 void Config::Init() {
-	const auto ini = new Utils::Ini("SKSEMenuFramework.ini");
+	const auto ini = new Utils::Ini("SKSE Menu Framework.ini");
     ini->SetSection("General");
     ToggleKey = GetKeyBinding(ini->GetString("ToggleKey", "f1"));
     FreezeTimeOnMenu = ini->GetBool("FreezeTimeOnMenu", true);
