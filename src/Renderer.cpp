@@ -120,8 +120,8 @@ void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ProcessOpenClose(RE::InputEvent* const* evns) {
-    if (!*evns) return;
+bool ProcessOpenClose(RE::InputEvent* const* evns) {
+    if (!*evns) return false;
 
     for (RE::InputEvent* e = *evns; e; e = e->next) {
         if (e->eventType.get() != RE::INPUT_EVENT_TYPE::kButton) continue;
@@ -129,23 +129,33 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
         if (!a_event->IsDown() || a_event->GetDevice() != RE::INPUT_DEVICE::kKeyboard) continue;
         if (a_event->GetIDCode() == Config::ToggleKey) {
             UI::MainInterface->IsOpen = !UI::MainInterface->IsOpen.load();
+            return true;
         }
         if (a_event->GetIDCode() == REX::W32::DIK_ESCAPE) {
+            bool hasChanged = UI::MainInterface->IsOpen.load();
             UI::MainInterface->IsOpen = false;
+            return hasChanged;
         }
     }
+    return false;
 }
 
 void UI::ProcessInputQueueHook::thunk(RE::BSTEventSource<RE::InputEvent*>* a_dispatcher,
                                       RE::InputEvent* const* a_event) {
-    ProcessOpenClose(a_event);
-    if (IsAnyWindowOpen()) {
+    bool isInputCapturedByOpenClose = ProcessOpenClose(a_event);
+    if (isInputCapturedByOpenClose) {
         constexpr RE::InputEvent* const dummy[] = {nullptr};
         originalFunction(a_dispatcher, dummy);
-        TranslateInputEvent(a_event);
     } else {
-        originalFunction(a_dispatcher, a_event);
+        if (IsAnyWindowOpen()) {
+            constexpr RE::InputEvent* const dummy[] = {nullptr};
+            originalFunction(a_dispatcher, dummy);
+            TranslateInputEvent(a_event);
+        } else {
+            originalFunction(a_dispatcher, a_event);
+        }
     }
+
 }
 
 HookBuilder* UI::Renderer::GetBuilder() {
