@@ -36,21 +36,21 @@ ImGuiKey ParseKeyFromKeyboard(RE::BSKeyboardDevice::Key a_key) {
         case RE::BSKeyboardDevice::Key::kEscape:
             return ImGuiKey_Escape;
         case RE::BSKeyboardDevice::Key::kLeftControl:
-            return ImGuiKey_LeftCtrl;
+            return ImGuiKey_ModCtrl;
         case RE::BSKeyboardDevice::Key::kLeftShift:
-            return ImGuiKey_LeftShift;
+            return ImGuiKey_ModShift;
         case RE::BSKeyboardDevice::Key::kLeftAlt:
-            return ImGuiKey_LeftAlt;
+            return ImGuiKey_ModAlt;
         case RE::BSKeyboardDevice::Key::kLeftWin:
-            return ImGuiKey_LeftSuper;
+            return ImGuiKey_ModSuper;
         case RE::BSKeyboardDevice::Key::kRightControl:
-            return ImGuiKey_RightCtrl;
+            return ImGuiKey_ModCtrl;
         case RE::BSKeyboardDevice::Key::kRightShift:
-            return ImGuiKey_RightShift;
+            return ImGuiKey_ModShift;
         case RE::BSKeyboardDevice::Key::kRightAlt:
-            return ImGuiKey_RightAlt;
+            return ImGuiKey_ModAlt;
         case RE::BSKeyboardDevice::Key::kRightWin:
-            return ImGuiKey_RightSuper;
+            return ImGuiKey_ModSuper;
         // Skip 535
         case RE::BSKeyboardDevice::Key::kNum0:
             return ImGuiKey_0;
@@ -271,28 +271,7 @@ inline void TranslateButtonEvent(ImGuiIO& io, const RE::ButtonEvent* button) {
         case RE::INPUT_DEVICE::kKeyboard:{
             auto imKey = ParseKeyFromKeyboard(button->GetIDCode());
             auto pressed = button->IsPressed();
-            switch (imKey) {
-                case ImGuiKey_LeftCtrl:
-                case ImGuiKey_RightCtrl:
-                    io.AddKeyEvent(ImGuiKey_ModCtrl, pressed);
-                    break;
-                case ImGuiKey_LeftShift:
-                case ImGuiKey_RightShift:
-                    io.AddKeyEvent(ImGuiKey_ModShift, pressed);
-                    break;
-                case ImGuiKey_LeftAlt:
-                case ImGuiKey_RightAlt:
-                    io.AddKeyEvent(ImGuiKey_ModAlt, pressed);
-                    break;
-                case ImGuiKey_LeftSuper:
-                case ImGuiKey_RightSuper:
-                    io.AddKeyEvent(ImGuiKey_ModSuper, pressed);
-                    break;
-                default:
-                    io.AddKeyEvent(imKey, pressed);
-                    break;
-            }
-
+            io.AddKeyEvent(imKey, pressed);
         } break;
         case RE::INPUT_DEVICE::kMouse: {
             switch (auto key = static_cast<RE::BSWin32MouseDevice::Key>(button->GetIDCode())) {
