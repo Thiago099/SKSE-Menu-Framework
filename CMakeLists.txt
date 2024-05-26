@@ -1,3 +1,13 @@
+
+if(NOT DEFINED ENV{COMMONLIB_SSE_FOLDER})
+  message(FATAL_ERROR "Missing COMMONLIB_SSE_FOLDER environment variable")
+endif()
+
+if(NOT DEFINED ENV{IMGUI_LIB_FOLDER})
+  message(FATAL_ERROR "Missing IMGUI_LIB_FOLDER environment variable")
+endif()
+
+
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 set(wildlander_output false)
@@ -46,7 +56,7 @@ set(BUILD_TESTS OFF CACHE BOOL " " FORCE)
 
 #FetchContent_MakeAvailable(CommonLibNG)
 add_subdirectory("$ENV{COMMONLIB_SSE_FOLDER}" ${CMAKE_CURRENT_BINARY_DIR}/_deps/clib-build)
-get_target_property(commonlib_src_dir CommonLibSSE SOURCE_DIR)
+get_target_property(COMMONLIB_SRC_DIR CommonLibSSE SOURCE_DIR)
 
 # CLIB-UTIL
 find_path(CLIB_UTIL_INCLUDE_DIRS "ClibUtil/utils.hpp")
@@ -64,7 +74,7 @@ source_group(
 )
 
 set(BUILD_TESTS OFF)
-include(${commonlib_src_dir}/cmake/CommonLibSSE.cmake)
+include(${COMMONLIB_SRC_DIR}/cmake/CommonLibSSE.cmake)
 
 add_commonlibsse_plugin(
   ${PROJECT_NAME}
@@ -105,9 +115,9 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE IS_HOST_PLUGIN)
 set(ImGui_BASE_DIR "E:/www/skyrim/imgui")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(ImGui_INSTALL_DIR "${ImGui_BASE_DIR}/debug")
+    set(ImGui_INSTALL_DIR "$ENV{IMGUI_LIB_FOLDER}/debug")
 else()
-    set(ImGui_INSTALL_DIR "${ImGui_BASE_DIR}/release")
+    set(ImGui_INSTALL_DIR "$ENV{IMGUI_LIB_FOLDER}/release")
 endif()
 
 set(ImGui_DIR "${ImGui_INSTALL_DIR}/lib/cmake")
