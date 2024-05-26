@@ -98,7 +98,6 @@ void __stdcall UI::RenderMenuWindow() {
         display_node->Render();
     }
     ImGui::EndChild();
-
     ImGui::End();
 }
 

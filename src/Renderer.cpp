@@ -150,9 +150,9 @@ void UI::ProcessInputQueueHook::thunk(RE::BSTEventSource<RE::InputEvent*>* a_dis
 
 HookBuilder* UI::Renderer::GetBuilder() {
     auto builder = new HookBuilder();
-    builder->AddCall<D3DInitHook, 5, 15>(75595, 0x9, 77226, 0x275, 0xDC5530, 0x9);
-    builder->AddCall<DXGIPresentHook, 5, 15>(75461, 0x9, 77246, 0x9, 0xDBBDD0, 0x15);
-    builder->AddCall<ProcessInputQueueHook, 5, 15>(67315, 0x7B, 68617, 0x7B, 0xC519E0, 0x81);
+    builder->AddCall<D3DInitHook, 5, 14>(75595, 0x9, 77226, 0x275, 0xDC5530, 0x9);
+    builder->AddCall<DXGIPresentHook, 5, 14>(75461, 0x9, 77246, 0x9, 0xDBBDD0, 0x15);
+    builder->AddCall<ProcessInputQueueHook, 5, 14>(67315, 0x7B, 68617, 0x7B, 0xC519E0, 0x81);
     return builder;
 }
 
