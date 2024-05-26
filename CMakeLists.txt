@@ -45,7 +45,7 @@ set(ENABLE_SKYRIM_VR ON CACHE BOOL " " FORCE)
 set(BUILD_TESTS OFF CACHE BOOL " " FORCE)
 
 #FetchContent_MakeAvailable(CommonLibNG)
-add_subdirectory("$ENV{CLIBNG_ROOT}" ${CMAKE_CURRENT_BINARY_DIR}/_deps/clib-build)
+add_subdirectory("$ENV{COMMONLIB_SRC_DIR}" ${CMAKE_CURRENT_BINARY_DIR}/_deps/clib-build)
 get_target_property(commonlib_src_dir CommonLibSSE SOURCE_DIR)
 
 # CLIB-UTIL

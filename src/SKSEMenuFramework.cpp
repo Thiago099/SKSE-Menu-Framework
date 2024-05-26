@@ -1,7 +1,7 @@
 #include "SKSEMenuFramework.h"
 
 
-void AddSection(const char* path, UI::RenderFunction rendererFunction) { 
+void AddSectionItem(const char* path, UI::RenderFunction rendererFunction) { 
     auto pathSplit = SplitString(path, '/');
     AddToTree(UI::RootMenu, pathSplit, rendererFunction, pathSplit.back());
 }
