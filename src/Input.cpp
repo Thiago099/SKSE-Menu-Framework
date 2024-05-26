@@ -268,9 +268,32 @@ inline void TranslateButtonEvent(ImGuiIO& io, const RE::ButtonEvent* button) {
     }
 
     switch (button->GetDevice()) {
-        case RE::INPUT_DEVICE::kKeyboard: {
+        case RE::INPUT_DEVICE::kKeyboard:
+        case RE::INPUT_DEVICE::kNone:{
             auto imKey = ParseKeyFromKeyboard(button->GetIDCode());
-            io.AddKeyEvent(imKey, button->IsPressed());
+            auto pressed = button->IsPressed();
+            switch (imKey) {
+                case ImGuiKey_LeftCtrl:
+                case ImGuiKey_RightCtrl:
+                    io.AddKeyEvent(ImGuiKey_ModCtrl, pressed);
+                    break;
+                case ImGuiKey_LeftShift:
+                case ImGuiKey_RightShift:
+                    io.AddKeyEvent(ImGuiKey_ModShift, pressed);
+                    break;
+                case ImGuiKey_LeftAlt:
+                case ImGuiKey_RightAlt:
+                    io.AddKeyEvent(ImGuiKey_ModAlt, pressed);
+                    break;
+                case ImGuiKey_LeftSuper:
+                case ImGuiKey_RightSuper:
+                    io.AddKeyEvent(ImGuiKey_ModSuper, pressed);
+                    break;
+                default:
+                    io.AddKeyEvent(imKey, pressed);
+                    break;
+            }
+
         } break;
         case RE::INPUT_DEVICE::kMouse: {
             switch (auto key = static_cast<RE::BSWin32MouseDevice::Key>(button->GetIDCode())) {
