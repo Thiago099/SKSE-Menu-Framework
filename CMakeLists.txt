@@ -8,7 +8,7 @@ if(NOT DEFINED ENV{IMGUI_LIB_FOLDER})
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(PROJECT_SUFFIX "DEV")
+    set(PROJECT_SUFFIX " DEV")
 else()
     set(PROJECT_SUFFIX "")
 endif()
@@ -26,6 +26,7 @@ cmake_minimum_required(VERSION 3.21)
 # Set your project name. This will be the name of your SKSE .dll file.
 set(AUTHOR_NAME "SkyrimThiago")
 set(PRODUCT_NAME "SKSEMenuFramework")
+set(BEAUTIFUL_NAME "SKSE Menu Framework")
 project(${PRODUCT_NAME} VERSION 0.1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -118,8 +119,6 @@ install(TARGETS ${PROJECT_NAME}
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE IS_HOST_PLUGIN)
 
-set(ImGui_BASE_DIR "E:/www/skyrim/imgui")
-
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(ImGui_INSTALL_DIR "$ENV{IMGUI_LIB_FOLDER}/debug")
 else()
@@ -158,14 +157,14 @@ function(copyOutputs TARGET_FOLDER)
             COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_PDB_FILE:${PROJECT_NAME}>" "${DLL_FOLDER}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>"
             VERBATIM
         )
-    endif()
 
-    add_custom_command(
-        TARGET "${PROJECT_NAME}"
-        POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/include/SKSEMenuFramework.h" "${DLL_FOLDER}"
-        VERBATIM
-    )
+        add_custom_command(
+            TARGET "${PROJECT_NAME}"
+            POST_BUILD
+            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/include/SKSEMenuFramework.h" "${DLL_FOLDER}"
+            VERBATIM
+        )
+    endif()
 
 endfunction()
 
@@ -174,14 +173,14 @@ if(DEFINED ENV{SKYRIM_FOLDER} AND IS_DIRECTORY "$ENV{SKYRIM_FOLDER}/Data")
     copyOutputs("$ENV{SKYRIM_FOLDER}/Data")
 endif()
 if(DEFINED ENV{WILDLANDER_OWRT_FOLDER} AND IS_DIRECTORY "$ENV{WILDLANDER_OWRT_FOLDER}" AND wildlander_output)
-    copyOutputs("$ENV{WILDLANDER_OWRT_FOLDER}/${PROJECT_NAME}${PROJECT_SUFFIX}")
+    copyOutputs("$ENV{WILDLANDER_OWRT_FOLDER}/${BEAUTIFUL_NAME}${PROJECT_SUFFIX}")
 endif()
 if(DEFINED ENV{SKYRIM_OWRT_FOLDER} AND IS_DIRECTORY "$ENV{SKYRIM_OWRT_FOLDER}" AND steam_owrt_output)
-    copyOutputs("$ENV{SKYRIM_OWRT_FOLDER}/${PROJECT_NAME}${PROJECT_SUFFIX}")
+    copyOutputs("$ENV{SKYRIM_OWRT_FOLDER}/${BEAUTIFUL_NAME}${PROJECT_SUFFIX}")
 endif()
 if(DEFINED ENV{SKYRIM_MODS_FOLDER} AND IS_DIRECTORY "$ENV{SKYRIM_MODS_FOLDER}" AND steam_mods_output)
-    copyOutputs("$ENV{SKYRIM_MODS_FOLDER}/${PROJECT_NAME}${PROJECT_SUFFIX}")
+    copyOutputs("$ENV{SKYRIM_MODS_FOLDER}/${BEAUTIFUL_NAME}${PROJECT_SUFFIX}")
 endif()
 if(DEFINED ENV{SKYRIM_MODS_FOLDER2} AND IS_DIRECTORY "$ENV{SKYRIM_MODS_FOLDER2}" AND steam_mods_output)
-    copyOutputs("$ENV{SKYRIM_MODS_FOLDER2}/${PROJECT_NAME}${PROJECT_SUFFIX}")
+    copyOutputs("$ENV{SKYRIM_MODS_FOLDER2}/${BEAUTIFUL_NAME}${PROJECT_SUFFIX}")
 endif()

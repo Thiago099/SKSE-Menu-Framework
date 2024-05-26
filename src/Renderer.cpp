@@ -120,7 +120,6 @@ void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-
 void ProcessOpenClose(RE::InputEvent* const* evns) {
     if (!*evns) return;
 
@@ -136,7 +135,6 @@ void ProcessOpenClose(RE::InputEvent* const* evns) {
         }
     }
 }
-
 
 void UI::ProcessInputQueueHook::thunk(RE::BSTEventSource<RE::InputEvent*>* a_dispatcher,
                                       RE::InputEvent* const* a_event) {
