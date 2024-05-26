@@ -268,8 +268,7 @@ inline void TranslateButtonEvent(ImGuiIO& io, const RE::ButtonEvent* button) {
     }
 
     switch (button->GetDevice()) {
-        case RE::INPUT_DEVICE::kKeyboard:
-        case RE::INPUT_DEVICE::kNone:{
+        case RE::INPUT_DEVICE::kKeyboard:{
             auto imKey = ParseKeyFromKeyboard(button->GetIDCode());
             auto pressed = button->IsPressed();
             switch (imKey) {
