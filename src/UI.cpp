@@ -59,17 +59,29 @@ void __stdcall UI::RenderMenuWindow() {
     window_flags |= ImGuiWindowFlags_NoCollapse;
     ImGui::Begin("Mod Control Panel", nullptr, window_flags);
 
-    ImGui::BeginChild("TreeView2", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, 20), ImGuiChildFlags_None,
+    float offset1 = 20.0f;
+    float offset2 = 20.0f;
+    float offset3 = 0.0f;
+
+    if (Config::ModifyMenuStyle) {
+        offset1 = 50.0f;
+        offset2 = 41.0f;
+        offset3 = 5.0f;
+    }
+
+
+    ImGui::BeginChild("TreeView2", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, offset1), ImGuiChildFlags_None,
                       window_flags);
     filter.Draw("##SKSEModControlPanelMenuFilter", -FLT_MIN);
     ImGui::EndChild();
     ImGui::SameLine();
-    ImGui::BeginChild("SKSEModControlPanelModMenuHeader", ImVec2(0, 20), ImGuiChildFlags_None, window_flags);
+    ImGui::BeginChild("SKSEModControlPanelModMenuHeader", ImVec2(0, offset2), ImGuiChildFlags_None, window_flags);
     if (display_node) {
         auto windowWidth = ImGui::GetWindowSize().x;
         auto textWidth = ImGui::CalcTextSize(display_node->Title.c_str()).x;
         float offsetX = (windowWidth - textWidth) * 0.5f;
         ImGui::SetCursorPosX(offsetX);
+        ImGui::SetCursorPosY(offset3);
         ImGui::Text(display_node->Title.c_str());
     } else {
         // TODO: Default title
