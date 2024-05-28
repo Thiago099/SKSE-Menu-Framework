@@ -6,4 +6,5 @@ class Config {
     static void Init();
     static unsigned int ToggleKey;
     static bool FreezeTimeOnMenu;
+    static bool ModifyMenuStyle;
 };

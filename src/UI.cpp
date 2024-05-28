@@ -79,11 +79,13 @@ void __stdcall UI::RenderMenuWindow() {
     ImGui::BeginChild("SKSEModControlPanelTreeView", ImVec2(ImGui::GetContentRegionAvail().x * 0.3f, -FLT_MIN),
                       ImGuiChildFlags_Border, window_flags);
     node_id = 0;
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 5.0f));
     for (const auto& item : RootMenu->Children) {
         if (filter.PassFilter(item.first.c_str()) &&
             (ImGui::CollapsingHeader(std::format("{}##{}", item.first, node_id).c_str()))) {
             for (auto node : item.second->Children) {
                 RenderNode(node);
+
             }
         } else {
             for (auto node : item.second->Children) {
@@ -91,6 +93,7 @@ void __stdcall UI::RenderMenuWindow() {
             }
         }
     }
+    ImGui::PopStyleVar();
     ImGui::EndChild();
     ImGui::SameLine();
     ImGui::BeginChild("SKSEModControlPanelMenuNode", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
@@ -119,3 +122,4 @@ void UI::AddToTree(UI::MenuTree* node, std::vector<std::string>& path, UI::Rende
         node->Title = title;
     }
 }
+
