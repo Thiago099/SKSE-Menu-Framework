@@ -18,7 +18,7 @@ void GameLock::SetState(State currentState) {
         }
     }
 
-    if (Config::BlurBackground) {
+    if (Config::BlurBackgroundOnMenu) {
         if (currentState == State::Locked) {
             RE::UIBlurManager::GetSingleton()->IncrementBlurCount();
         } else {

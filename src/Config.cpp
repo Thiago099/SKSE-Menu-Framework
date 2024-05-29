@@ -3,7 +3,7 @@
 unsigned int Config::ToggleKey = 0x3B;
 bool Config::FreezeTimeOnMenu = true;
 MenuStyle Config::MenuStyle = MenuStyle::Skyrim;
-bool Config::BlurBackground = true;
+bool Config::BlurBackgroundOnMenu = true;
 
 char* toUpperCase(const char* str) {
     if (str == nullptr) {
@@ -28,7 +28,7 @@ void Config::Init() {
 
     ToggleKey = GetKeyBinding(ini->GetString("ToggleKey", "f1"));
     FreezeTimeOnMenu = ini->GetBool("FreezeTimeOnMenu", true);
-    BlurBackground = ini->GetBool("BlurBackground", true);
+    BlurBackgroundOnMenu = ini->GetBool("BlurBackgroundOnMenu", true);
     auto menuStyleStr = toUpperCase(ini->GetString("MenuStyle", "SKYRIM"));
 
     if (strcmp(menuStyleStr, "MODERN") == 0) {
