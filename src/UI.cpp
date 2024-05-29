@@ -63,7 +63,7 @@ void __stdcall UI::RenderMenuWindow() {
     float offset2 = 20.0f;
     float offset3 = 0.0f;
 
-    if (Config::ModifyMenuStyle) {
+    if (Config::MenuStyle != MenuStyle::Classic) {
         offset1 = 50.0f;
         offset2 = 41.0f;
         offset3 = 5.0f;

@@ -71,7 +71,8 @@ namespace UI {
         void UI::TranslateInputEvent(RE::InputEvent* const* a_event);
     }
     bool IsAnyWindowOpen();
-    void SetUpStyle();
+    void TransparentStyle();
+    void ModernStyle();
 }
 
 

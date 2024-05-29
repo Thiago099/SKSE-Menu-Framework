@@ -17,6 +17,15 @@ void GameLock::SetState(State currentState) {
             main->freezeTime = false;
         }
     }
+
+    if (Config::BlurBackground) {
+        if (currentState == State::Locked) {
+            RE::UIBlurManager::GetSingleton()->IncrementBlurCount();
+        } else {
+            RE::UIBlurManager::GetSingleton()->DecrementBlurCount();
+        }
+    }
+
     if (currentState == State::Unlocked) {
         auto& io = ImGui::GetIO();
         io.ClearInputKeys();
@@ -88,8 +97,10 @@ void UI::D3DInitHook::thunk() {
         SKSE::log::error("SetWindowLongPtrA failed!");
     }
 
-    if (Config::ModifyMenuStyle) {
-        UI::SetUpStyle();
+    if (Config::MenuStyle == MenuStyle::Skyrim) {
+        UI::TransparentStyle();
+    } else if (Config::MenuStyle == MenuStyle::Modern) {
+        UI::ModernStyle();
     }
 
     logger::debug("[D3DInitHook] FINISH");
@@ -106,7 +117,6 @@ void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
         return;
     }
     GameLock::SetState(GameLock::State::Locked);
-
 
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -184,13 +194,21 @@ bool UI::IsAnyWindowOpen() {
     return it != Windows.end();
 }
 
+void LoadFont(ImGuiIO& io) {
+    if (std::filesystem::exists("Data/SKSE/Plugins/SkyrimMenuFont.ttf")) {
+        ImFont* skyrimFont = io.Fonts->AddFontFromFileTTF("Data/SKSE/Plugins/SkyrimMenuFont.ttf", 32);
+        io.FontDefault = skyrimFont;
+    }
+}
 
-void UI::SetUpStyle() {
+void UI::ModernStyle() {
     // Assuming you have set up Dear ImGui properly in your application
     ImGui::StyleColorsDark();
     ImGuiIO& io = ImGui::GetIO();
     ImGuiStyle& style = ImGui::GetStyle();
     ImVec4* colors = style.Colors;
+
+    LoadFont(io);
 
     style.WindowRounding = 0.0f;
     style.FrameRounding = 2.0f;
@@ -205,11 +223,6 @@ void UI::SetUpStyle() {
     style.PopupBorderSize = 3.0f;
     style.TabBarBorderSize = 3.0f;
     style.TabBorderSize = 3.0f;
-
-    ImFont* skyrimFont = io.Fonts->AddFontFromFileTTF("imgui.ttf", 32);
-
-    io.FontDefault = skyrimFont;
-
 
     style.FramePadding = ImVec2(10.0f, 5.0f);
 
@@ -261,4 +274,96 @@ void UI::SetUpStyle() {
     colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
     colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
     colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
+}
+
+void UI::TransparentStyle() {
+    // Assuming you have set up Dear ImGui properly in your application
+    ImGui::StyleColorsDark();
+    ImGuiIO& io = ImGui::GetIO();
+    ImGuiStyle& style = ImGui::GetStyle();
+    ImVec4* colors = style.Colors;
+
+    LoadFont(io);
+
+    style.WindowRounding = 0.0f;
+    style.FrameRounding = 0.0f;
+    style.GrabRounding = 2.0f;
+    style.ScrollbarRounding = 2.0f;
+    style.ChildRounding = 0.0f;
+    style.PopupRounding = 0.0f;
+
+    style.WindowBorderSize = 3.0f;
+    style.ChildBorderSize = 3.0f;
+    style.FrameBorderSize = 1.0f;
+    style.PopupBorderSize = 3.0f;
+    style.TabBarBorderSize = 3.0f;
+    style.TabBorderSize = 3.0f;
+
+
+    style.FramePadding = ImVec2(10.0f, 5.0f);
+
+    colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.6f);
+    colors[ImGuiCol_ChildBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+    colors[ImGuiCol_Border] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
+
+    colors[ImGuiCol_TableHeaderBg] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
+
+    colors[ImGuiCol_TitleBg] = ImVec4(0.0f,0.0f, 0.0f, 0.6f);
+    colors[ImGuiCol_TitleBgActive] = ImVec4(0.0f, 0.0f, 0.0f, 0.6f);
+    colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.0f, 0.0f, 0.0f, 0.6f);
+
+    colors[ImGuiCol_Button] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
+    colors[ImGuiCol_ButtonHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_ButtonActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
+    
+    colors[ImGuiCol_Header] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
+    colors[ImGuiCol_HeaderHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_HeaderActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
+
+    colors[ImGuiCol_PopupBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.6f);
+    colors[ImGuiCol_FrameBg] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
+    colors[ImGuiCol_FrameBgHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_FrameBgActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
+
+    colors[ImGuiCol_MenuBarBg] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
+    colors[ImGuiCol_ScrollbarBg] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+
+    colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+    colors[ImGuiCol_TextDisabled] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_BorderShadow] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_ScrollbarGrab] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_CheckMark] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_SliderGrab] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_SliderGrabActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+
+    colors[ImGuiCol_Separator] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
+    colors[ImGuiCol_SeparatorHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_SeparatorActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
+
+    colors[ImGuiCol_ResizeGrip] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
+    colors[ImGuiCol_ResizeGripHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_ResizeGripActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
+
+    colors[ImGuiCol_Tab] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_TabHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_TabActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
+
+    colors[ImGuiCol_TabUnfocused] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
+    colors[ImGuiCol_TabUnfocusedActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
+
+    colors[ImGuiCol_PlotLines] = ImVec4(1.0f, 1.0f, 1.0f, 8.0f);
+    colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+    colors[ImGuiCol_PlotHistogram] = ImVec4(1.0f, 1.0f, 1.0f, 0.8f);
+    colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+    colors[ImGuiCol_TextSelectedBg] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
+
+    colors[ImGuiCol_DragDropTarget] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_NavHighlight] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_NavWindowingDimBg] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_ModalWindowDimBg] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
 }
