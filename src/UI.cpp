@@ -40,7 +40,7 @@ void RenderNode(std::pair<const std::string, UI::MenuTree*>& node) {
         }
     }
     if (node_open && node.second->Children.size() != 0) {
-        for (auto& item : node.second->Children) {
+        for (auto& item : node.second->SortedChildren) {
             RenderNode(item);
         }
         ImGui::TreePop();
@@ -95,7 +95,7 @@ void __stdcall UI::RenderMenuWindow() {
     for (const auto& item : RootMenu->Children) {
         if (filter.PassFilter(item.first.c_str()) &&
             (ImGui::CollapsingHeader(std::format("{}##{}", item.first, node_id).c_str()))) {
-            for (auto node : item.second->Children) {
+            for (auto node : item.second->SortedChildren) {
                 RenderNode(node);
 
             }
@@ -127,6 +127,7 @@ void UI::AddToTree(UI::MenuTree* node, std::vector<std::string>& path, UI::Rende
         } else {
             auto newItem = new UI::MenuTree();
             node->Children[currentName] = newItem;
+            node->SortedChildren.push_back(std::pair<const std::string, UI::MenuTree*>(currentName, newItem));
             AddToTree(newItem, path, render, title);
         }
     } else {

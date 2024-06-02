@@ -5,6 +5,7 @@ namespace UI {
     class MenuTree {
     public:
         std::map<std::string, MenuTree*> Children;
+        std::vector<std::pair<const std::string, MenuTree*>> SortedChildren;
         RenderFunction Render;
         std::string Title;
     };
