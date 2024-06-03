@@ -17,3 +17,28 @@ UI::WindowInterface* AddWindow(UI::RenderFunction rendererFunction) {
     return newWindow->Interface;
 
 }
+
+void PushSolid() {
+    if (UI::faSolid) {
+        ImGui::PushFont(UI::faSolid);
+    }
+}
+
+void PushRegular() { 
+    if (UI::faRegular) {
+        ImGui::PushFont(UI::faRegular);
+    }
+}
+
+void PushBrands() {
+    if (UI::faBrands) {
+        ImGui::PushFont(UI::faBrands);
+    }
+}
+
+void Pop() {
+    ImFont* currentFont = ImGui::GetFont(); 
+    if (currentFont != UI::defaultFont) {
+        ImGui::PopFont();
+    }
+}

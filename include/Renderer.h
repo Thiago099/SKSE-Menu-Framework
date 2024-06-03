@@ -73,6 +73,13 @@ namespace UI {
     bool IsAnyWindowOpen();
     void TransparentStyle();
     void ModernStyle();
+    void LoadFontAwesome(ImGuiIO& io);
+    void LoadSkyrimFont(ImGuiIO& io);
+
+    extern ImFont* faSolid;
+    extern ImFont* faRegular;
+    extern ImFont* faBrands;
+    extern ImFont* defaultFont;
 }
 
 
