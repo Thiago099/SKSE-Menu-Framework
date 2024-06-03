@@ -6,6 +6,11 @@
     #include "Application.h"
     #include "Renderer.h"
     #include "UI.h"
+#else
+    #include <string>
+    #include <locale>
+    #include <codecvt>
+    #include <cassert>
 #endif
 
 #ifdef IS_HOST_PLUGIN
@@ -52,23 +57,9 @@ FUNCTION_PREFIX void Pop();
         FUNCTION_PREFIX void PushBrands();
         FUNCTION_PREFIX void Pop();
         inline std::string UnicodeToUtf8(unsigned int codepoint) {
-            std::string utf8;
-            if (codepoint <= 0x7F) {
-                utf8.push_back(static_cast<char>(codepoint));
-            } else if (codepoint <= 0x7FF) {
-                utf8.push_back(static_cast<char>(0xC0 | ((codepoint >> 6) & 0x1F)));
-                utf8.push_back(static_cast<char>(0x80 | (codepoint & 0x3F)));
-            } else if (codepoint <= 0xFFFF) {
-                utf8.push_back(static_cast<char>(0xE0 | ((codepoint >> 12) & 0x0F)));
-                utf8.push_back(static_cast<char>(0x80 | ((codepoint >> 6) & 0x3F)));
-                utf8.push_back(static_cast<char>(0x80 | (codepoint & 0x3F)));
-            } else if (codepoint <= 0x10FFFF) {
-                utf8.push_back(static_cast<char>(0xF0 | ((codepoint >> 18) & 0x07)));
-                utf8.push_back(static_cast<char>(0x80 | ((codepoint >> 12) & 0x3F)));
-                utf8.push_back(static_cast<char>(0x80 | ((codepoint >> 6) & 0x3F)));
-                utf8.push_back(static_cast<char>(0x80 | (codepoint & 0x3F)));
-            }
-            return utf8;
+            std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> converter;
+            std::string u8str = converter.to_bytes(codepoint);
+            return u8str;
         }
     }
 #endif
