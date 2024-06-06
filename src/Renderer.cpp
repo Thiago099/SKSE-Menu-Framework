@@ -361,7 +361,7 @@ void UI::TransparentStyle() {
     colors[ImGuiCol_ButtonHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
     colors[ImGuiCol_ButtonActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
     
-    colors[ImGuiCol_Header] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
+    colors[ImGuiCol_Header] = ImVec4(1.0f, 1.0f, 1.0f, 0.1f);
     colors[ImGuiCol_HeaderHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
     colors[ImGuiCol_HeaderActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
 
